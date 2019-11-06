@@ -11,12 +11,19 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+import static com.example.firstapp.R.id.numberTextView;
 
+public class MainActivity<userNumber> extends AppCompatActivity {
+
+    private TextView response;
+    public EditText guess;
+    private TextView points;
+ int counter = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,13 +65,43 @@ public class MainActivity extends AppCompatActivity {
 
     public void on_button_click (View view) {
 
-        TextView tv = this.findViewById(R.id.numberTextView);
+        TextView tv = this.findViewById(numberTextView);
+
+        response = (TextView)findViewById(R.id.Response);
+        points = (TextView)findViewById(R.id.Points);
+        guess = (EditText)findViewById(R.id.Number);
+
 
         Random r = new Random();
         int number = r.nextInt(6);
-
         tv.setText(Integer.toString(number));
+
+        int userNumber;
+        userNumber = Integer.parseInt(guess.getText().toString());
+
+        if (userNumber < 1 || userNumber > 6);
+        {
+
+            response.setText("Please guess 1-6");
+
+        }  if (userNumber == number) {
+
+            counter++;
+
+            points.setText("Points: "+ counter);
+
+            response.setText("Congratulations!");
+
+        } else {
+
+            response.setText("Try Again!");
+        }
+
+
     }
 
-    public void
-}
+
+    }
+
+
+
