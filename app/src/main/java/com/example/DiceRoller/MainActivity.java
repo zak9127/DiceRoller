@@ -1,4 +1,4 @@
-package com.example.firstapp;
+package com.example.DiceRoller;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -15,29 +15,33 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Random;
 
-import static com.example.firstapp.R.id.Points;
-import static com.example.firstapp.R.id.numberTextView;
-import static com.example.firstapp.R.id.question;
+import static com.example.DiceRoller.R.id.numberTextView;
+import static com.example.DiceRoller.R.id.question;
 
-public class MainActivity<userNumber> extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private TextView response;
     public EditText guess;
     private TextView points;
     int counter = 0;
-    private TextView tv;
+    private final ThreadLocal<TextView> tv = new ThreadLocal<TextView>();
     private String randText;
-    private View number;
-    private View RandomQ;
-    private View RanNumber;
+    public View number;
+    @SuppressLint("WrongViewCast")
+    private EditText RandomQ = findViewById(question);
+    @SuppressLint("WrongViewCast")
+    private EditText RanNumber = findViewById(numberTextView);
 
-    public MainActivity() {
+    public MainActivity(TextView tv, String randText, View number, EditText randomQ) {
+        this.tv.set(tv);
+        this.randText = randText;
+        this.number = number;
+        RandomQ = randomQ;
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,13 +82,14 @@ public class MainActivity<userNumber> extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("SetTextI18n")
     public void on_button_click(View view) {
 
         TextView tv = this.findViewById(numberTextView);
 
-        response = (TextView) findViewById(R.id.Response);
-        points = (TextView) findViewById(R.id.Points);
-        guess = (EditText) findViewById(R.id.Number);
+        response = findViewById(R.id.Response);
+        points = findViewById(R.id.Points);
+        guess = findViewById(R.id.Number);
 
 
         Random r = new Random();
@@ -116,7 +121,7 @@ public class MainActivity<userNumber> extends AppCompatActivity {
 
     }
 
-    @SuppressLint("WrongViewCast")
+    @SuppressLint({"WrongViewCast", "SetTextI18n"})
     public void on_button_click1() {
 
         ArrayList<String> q = new ArrayList<String>();
@@ -131,16 +136,16 @@ public class MainActivity<userNumber> extends AppCompatActivity {
         response =  findViewById(R.id.Response);
         points =  findViewById(R.id.Points);
         guess = findViewById(R.id.Number);
-        RanNumber = findViewById(R.id.numberTextView);
-        RandomQ = findViewById(R.id.question);
+        RandomQ = this.findViewById(R.id.question);
+        RanNumber = findViewById(numberTextView);
 
         Random r = new Random();
         int number = r.nextInt(6);
-        tv.setText(Integer.toString(number));
+        tv.get().setText(Integer.toString(number));
 
         randText = Integer.toString(number);
-        RandomQ.setText()
-
+        RandomQ.setText(q.get(number));
+        RanNumber.setText(randText);
 
 
         int userNumber = Integer.parseInt(guess.getText().toString());
@@ -165,7 +170,7 @@ public class MainActivity<userNumber> extends AppCompatActivity {
     }
 
 
-    public static int roll_the_dice() {
+    private static int roll_the_dice() {
 
         Random r = new Random();
 
@@ -178,7 +183,16 @@ public class MainActivity<userNumber> extends AppCompatActivity {
 
     }
 
-    }}
+    }
+
+    public View getNumber() {
+        return number;
+    }
+
+    public void setNumber(View number) {
+        this.number = number;
+    }
+}
 
 
 

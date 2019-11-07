@@ -1,4 +1,4 @@
-package com.example.firstapp;
+package com.example.DiceRoller;
 
 import org.junit.Test;
 
